@@ -1,105 +1,92 @@
-%if 0%{?fedora}
-%bcond_without python3
-%else
+%global srcname pymediainfo
+
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %bcond_with python3
+%else
+%bcond_without python3
 %endif
 
-Name:           python-pymediainfo
+Name:           python-%{srcname}
 Version:        2.2.0
 Release:        1%{?dist}
 Summary:        Python wrapper around the MediaInfo library
 
 License:        MIT
-URL:            https://github.com/sbraz/pymediainfo
-Source0:        %{url}/archive/v%{version}.tar.gz
+URL:            https://github.com/sbraz/%{srcname}
+Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
-BuildRequires:  python2-pytest
-BuildRequires:  python2-pytest-runner
-%if %{with python3}
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-runner
-%endif # with python3
+
 BuildRequires:  libmediainfo
 
 %description
 %{sum}.
 
-%package     -n python2-pymediainfo
+%package     -n python2-%{srcname}
 Summary:        Python2 wrapper around the MediaInfo library
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+BuildRequires:  python2-pytest
+BuildRequires:  python2-pytest-runner
+Requires:       libmediainfo
+%{?python_provide:%python_provide python2-%{appname}}
 
-%description -n python2-pymediainfo
+%description -n python2-%{srcname}
 This small package is a Python2 wrapper around the MediaInfo library.
 
 %if %{with python3}
-%package     -n python3-pymediainfo
+%package     -n python3-%{srcname}
 Summary:        Python3 wrapper around the MediaInfo library
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-pytest
+BuildRequires:  python3-pytest-runner
+Requires:       libmediainfo
+%{?python_provide:%python_provide python3-%{appname}}
 
-%description -n python3-pymediainfo
+%description -n python3-%{srcname}
 This small package is a Python3 wrapper around the MediaInfo library.
 %endif # with python3
 
 
 %prep
-%autosetup -c
-mv pymediainfo-%{version} python2
-
-%if %{with python3}
-cp -a python2 python3
-%endif # with python3
+%autosetup -n %{srcname}-%{version}
 
 
 %build
-pushd python2
-    %py2_build
-popd
+%py2_build
 
 %if %{with python3}
-pushd python3
-    %py3_build
-popd
+%py3_build
 %endif # with python3
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %if %{with python3}
-pushd python3
-    %py3_install
-popd
+%py3_install
 %endif # with python3
 
-pushd python2
-    %py2_install
-popd
+%py2_install
 
 %check
 export LC_ALL=C.UTF-8
-pushd python2
-    %{__python2} setup.py test
-popd
+PYTEST_ADDOPTS='-k "not test_parse_url"' %{__python2} setup.py test
 
 %if %{with python3}
-pushd python3
-    %{__python3} setup.py test
-popd
+PYTEST_ADDOPTS='-k "not test_parse_url"' %{__python3} setup.py test
 %endif
 
 
-%files -n python2-pymediainfo
-%license python2/LICENSE
-%doc python2/AUTHORS python2/README.rst
-%{python2_sitelib}/*
+%files -n python2-%{srcname}
+%license LICENSE
+%doc AUTHORS README.rst
+%{python2_sitelib}/%{srcname}*
 
 %if %{with python3}
-%files -n python3-pymediainfo
-%license python3/LICENSE
-%doc python3/AUTHORS python3/README.rst
-%{python3_sitelib}/*
+%files -n python3-%{srcname}
+%license LICENSE
+%doc AUTHORS README.rst
+%{python3_sitelib}/%{srcname}*
 %endif # with python3
 
 
