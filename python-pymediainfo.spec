@@ -24,7 +24,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-pytest
 BuildRequires:  python3-pytest-runner
 %endif # with python3
-BuildRequires:  mediainfo
+BuildRequires:  libmediainfo
 
 %description
 %{sum}.
