@@ -24,6 +24,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-pytest
 BuildRequires:  python3-pytest-runner
 %endif # with python3
+BuildRequires:  mediainfo
 
 %description
 %{sum}.
@@ -77,13 +78,14 @@ pushd python2
 popd
 
 %check
+export LC_ALL=C.UTF-8
 pushd python2
-    PYTEST_ADDOPTS='-k "not test_parse_unicode_file"' %{__python2} setup.py test
+    %{__python2} setup.py test
 popd
 
 %if %{with python3}
 pushd python3
-    PYTEST_ADDOPTS='-k "not test_parse_unicode_file"' %{__python3} setup.py test
+    %{__python3} setup.py test
 popd
 %endif
 
