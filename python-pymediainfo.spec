@@ -29,7 +29,7 @@ BuildRequires:  python2-setuptools
 BuildRequires:  python2-pytest
 BuildRequires:  python2-pytest-runner
 Requires:       libmediainfo
-%{?python_provide:%python_provide python2-%{appname}}
+%{?python_provide:%python_provide python2-%{srcname}}
 
 %description -n python2-%{srcname}
 This small package is a Python2 wrapper around the MediaInfo library.
@@ -42,7 +42,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-pytest
 BuildRequires:  python3-pytest-runner
 Requires:       libmediainfo
-%{?python_provide:%python_provide python3-%{appname}}
+%{?python_provide:%python_provide python3-%{srcname}}
 
 %description -n python3-%{srcname}
 This small package is a Python3 wrapper around the MediaInfo library.
